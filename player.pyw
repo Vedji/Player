@@ -10,7 +10,7 @@ class MyWin(QtWidgets.QMainWindow):
         QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        papka=os.getcwd()+'\\dir.txt'
+        papka = os.getcwd() + '\\dir.txt'
         if(os.path.exists(papka)):
             file=open(u''+papka)
             self.ui.lineEdit.setText(file.read().strip())
@@ -31,7 +31,7 @@ class MyWin(QtWidgets.QMainWindow):
         self.flag=0
         self.stolb = 1
         self.scandisk()
-   
+        STOPPED_PLAYING = pygame.USEREVENT + 1
         
     def scandisk(self): 
         self.mode='mp3'
@@ -77,20 +77,21 @@ class MyWin(QtWidgets.QMainWindow):
     def playmusic(self):
         if self.flag == 0 and self.stolb == 0:
             if self.itemflag == 1:
-                put = self.songs[self.selitem]
-                mixer.music.stop()
-                mixer.music.load(u''+ put)
-                mixer.music.play()
-                self.flajok = 1
                 self.itemflag = 0
             else:
                 self.selitem = self.ui.listWidget_2.currentRow()
-                put = self.songs[self.selitem]
-                mixer.music.stop()
-                mixer.music.load(u''+ put)
-                mixer.music.play()
-                self.flajok = 1
-                
+            put = self.songs[self.selitem]
+            mixer.music.stop()
+            mixer.music.load(u''+ put)
+            mixer.music.play()
+            mixer.music.queue(self.songs[self.selitem + 1])
+            self.flajok = 1            
+    '''
+    def STOPPED_PLAYING(self, event):
+        if event.type == STOPPED_PLAYING:
+            print("the song ended!")
+            '''
+                    
     def stopmusic(self):
         mixer.music.stop()
         self.itemflag = 1
@@ -109,6 +110,7 @@ class MyWin(QtWidgets.QMainWindow):
             mixer.music.stop()
             mixer.music.load(u''+ put)
             mixer.music.play()
+            
     
     def nextmusic(self):
         if self.flajok == 1:
@@ -119,7 +121,7 @@ class MyWin(QtWidgets.QMainWindow):
             mixer.music.load(u''+ put)
             mixer.music.play()
         
-if __name__=="__main__":
+if __name__== "__main__":
     app = QtWidgets.QApplication(sys.argv)
     myapp = MyWin()
     myapp.show()
