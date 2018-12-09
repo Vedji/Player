@@ -1,4 +1,4 @@
-import sys,os, codecs
+import sys, os, codecs
 from myplayer2 import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pygame
@@ -12,12 +12,15 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         papka = os.getcwd() + '\\dir.txt'
         if(os.path.exists(papka)):
-            file=open(u''+papka)
+            file=open(papka)
             self.ui.lineEdit.setText(file.read().strip())
             file.close()
             self.mode='mp3'
-
-                             
+        papka1 = os.getcwd() + '\\Papka1.txt'
+        if (os.path.exists(papka1)):
+            file1 = open(papka1)
+            self.ui.lineEdit_2.setText(file1.read().strip())
+            file.close()
         self.ui.pushButton.clicked.connect(self.scandisk)
         self.ui.listWidget.currentTextChanged.connect(self.getfiles)
         self.ui.listWidget_2.currentTextChanged.connect(self.playmusic)
@@ -27,18 +30,20 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.pushButton_5.clicked.connect(self.unpausemusic)
         self.ui.pushButton_6.clicked.connect(self.previousmusic)
         self.ui.pushButton_7.clicked.connect(self.nextmusic)
+        self.ui.pushButton_8.clicked.connect(self.papka1)
+        self.ui.pushButton_8.clicked.connect(self.hot_key_1)
         self.songs=[]
-        self.flag=0
+        self.flag = 0
         self.stolb = 1
         self.scandisk()
-        STOPPED_PLAYING = pygame.USEREVENT + 1
+        #STOPPED_PLAYING = pygame.USEREVENT + 1
         
     def scandisk(self): 
         self.mode='mp3'
         mas=[] 
         mas2=[]
         papka=str(self.ui.lineEdit.text()).strip()
-        file = codecs.open(u'' + os.getcwd()+'\\dir.txt', "w", "utf-8")
+        file = codecs.open(os.getcwd()+'\\dir.txt', "w", "utf-8")
         file.write(papka)
         file.close()
             
@@ -73,9 +78,36 @@ class MyWin(QtWidgets.QMainWindow):
         self.flajok = 0 #для previous и next
         self.itemflag = 0
         self.stolb = 0
+        self.selitem = None
         
     def playmusic(self):
         if self.flag == 0 and self.stolb == 0:
+            if self.itemflag == 0:
+                self.selitem = self.ui.listWidget_2.currentRow()
+                put = self.songs[self.selitem]
+                mixer.music.stop()
+                mixer.music.load(put)
+                mixer.music.play()
+                #mixer.music.queue(self.songs[self.selitem + 1])
+                self.flajok = 1 
+            else:
+                if self.selitem == self.ui.listWidget_2.currentRow():
+                    put = self.songs[self.selitem]
+                    mixer.music.stop()
+                    mixer.music.load(put)
+                    mixer.music.play()
+                    #mixer.music.queue(self.songs[self.selitem + 1])
+                    self.flajok = 1             
+                    self.itemflag = 0
+                else:
+                    self.selitem = self.ui.listWidget_2.currentRow()
+                    put = self.songs[self.selitem]
+                    mixer.music.stop()
+                    mixer.music.load(put)
+                    mixer.music.play()
+                    #mixer.music.queue(self.songs[self.selitem + 1])
+                    self.flajok = 1 
+            '''
             if self.itemflag == 1:
                 self.itemflag = 0
             else:
@@ -85,7 +117,8 @@ class MyWin(QtWidgets.QMainWindow):
             mixer.music.load(u''+ put)
             mixer.music.play()
             mixer.music.queue(self.songs[self.selitem + 1])
-            self.flajok = 1            
+            self.flajok = 1
+            '''
     '''
     def STOPPED_PLAYING(self, event):
         if event.type == STOPPED_PLAYING:
@@ -108,19 +141,27 @@ class MyWin(QtWidgets.QMainWindow):
             self.selitem = self.selitem - 1
             put = self.songs[self.selitem]
             mixer.music.stop()
-            mixer.music.load(u''+ put)
+            mixer.music.load(put)
             mixer.music.play()
             
-    
     def nextmusic(self):
         if self.flajok == 1:
             mixer.music.stop()
             self.selitem = self.selitem + 1
             put=self.songs[self.selitem]
             mixer.music.stop()
-            mixer.music.load(u''+ put)
+            mixer.music.load(put)
             mixer.music.play()
+            
+    def papka1(self):
+        papka = str(self.ui.lineEdit_2.text()).strip()
+        file = codecs.open(os.getcwd() + '\\Papka1.txt', "w", "utf-8")
+        file.write(papka)
+        file.close()
         
+    def hot_key_1(self):
+        HK1 = self.ui.lineEdit_3.text()
+    
 if __name__== "__main__":
     app = QtWidgets.QApplication(sys.argv)
     myapp = MyWin()
