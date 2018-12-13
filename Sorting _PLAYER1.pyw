@@ -90,9 +90,9 @@ class MyWin(QMainWindow, Ui_MainWindow):
         for rootdir, dirs, files in os.walk(str(papka)):
             for file in files:       
                 if (file.split('.')[-1]) == 'mp3':
-                    #add file names 
-                    mas.append(os.path.join(rootdir, file))
                     #add file paths
+                    mas.append(os.path.join(rootdir, file))
+                    #add file names
                     mas2.append(os.path.join(rootdir, file).split('\\')[-2])
         #delete duplicates
         mas2 = dict(zip(mas2, mas2)).values()
