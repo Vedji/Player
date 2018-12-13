@@ -14,7 +14,7 @@ class MyWin(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         try:
-            file = open(str(os.getcwd()) + 'dir.txt', 'r')
+            file = open('dir.txt', 'r')
             file = file.read()
             if file != '':
                 self.lineEdit.setText(file)
@@ -23,7 +23,7 @@ class MyWin(QMainWindow, Ui_MainWindow):
             pass
         
         try:
-            file1 = open(str(os.getcwd()) + 'Papka1.txt', 'r')
+            file1 = open('Papka1.txt', 'r')
             file1 = file1.read()
             self.lineEdit_2.setText(file1)       
             file1.close()
@@ -31,7 +31,7 @@ class MyWin(QMainWindow, Ui_MainWindow):
             pass
         
         try:
-            file2 = open(str(os.getcwd()) + 'Papka2.txt', 'r')
+            file2 = open('Papka2.txt', 'r')
             file2 = file2.read()
             self.lineEdit_5.setText(file2)               
             file2.close()
@@ -39,7 +39,7 @@ class MyWin(QMainWindow, Ui_MainWindow):
             pass
         
         try:
-            file3 = open(str(os.getcwd()) + 'Papka3.txt', 'r')
+            file3 = open('Papka3.txt', 'r')
             file3 = file3.read()
             self.lineEdit_7.setText(file3)
             file3.close()
@@ -69,9 +69,9 @@ class MyWin(QMainWindow, Ui_MainWindow):
         self.re_music = False
         self.flajok = 0  # for previous and next
         self.itemflag = 0  # for stop and play music
-        self.stolb = 0  # for playmusic
         self.selitem = None               
         self.flag = 0
+        self.stolb = 1  # for playmusic
 
         self.scandisk()
         
@@ -83,7 +83,7 @@ class MyWin(QMainWindow, Ui_MainWindow):
         mas = [] 
         mas2 = []
         papka = str(self.lineEdit.text())
-        file = open(os.getcwd() + 'dir.txt', 'w')
+        file = open('dir.txt', 'w')
         file.write(papka)
         file.close()
             
@@ -112,7 +112,8 @@ class MyWin(QMainWindow, Ui_MainWindow):
                 self.songs.append(x)
                 self.listWidget_2.addItem(x.split('\\')[-1])
         self.listWidget_2.setFocus()
-        self.flag = 0     
+        self.flag = 0
+        self.stolb = 0  # for playmusic
         
     def playmusic(self):
         if self.flag == 0 and self.stolb == 0:
